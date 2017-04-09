@@ -12,8 +12,24 @@ function style(feature) {
 
 // return color code in dependence of the node count
 // queried in style()
+/* ///
 function getColor(d) {
     return d > 50 ? '#1b9e77' :
+           d > 40 ? '#d95f02' :
+           d > 30 ? '#7570b3' :
+           d > 20 ? '#e7298a' :
+           d > 15 ? '#66a61e' :
+           d > 10 ? '#e6ab02' :
+           d > 5 ?  '#a6761d' :
+                    '#666666';
+}
+*/
+function getColor(d) {
+    return d > 200 ? '#e08ea3' :
+           d > 150 ? '#9eeeff' :
+           d > 100 ? '#ffc200' :
+           d > 75 ? '#83d1ed' :
+           d > 50 ? '#1b9e77' :
            d > 40 ? '#d95f02' :
            d > 30 ? '#7570b3' :
            d > 20 ? '#e7298a' :

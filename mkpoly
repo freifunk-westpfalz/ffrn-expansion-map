@@ -2,6 +2,7 @@
 
 import json
 import copy
+import datetime
 import pickle
 import sys
 from argparse import ArgumentParser
@@ -25,7 +26,10 @@ geojson_frame = {
     'type': 'FeatureCollection',
     'features': []
 }
-
+state = {
+    'last_modified': '1970-01-01 00:00',
+    'nodes': 0
+}
 
 def fetch(url, maptype):
     """
@@ -114,6 +118,7 @@ def get_municipal_area(areas):
 def main(url, fmt):
     # get node information
     nodes = fetch(url, fmt)
+    node_count = 0
 
     distribution = {}
     for node, position in nodes.items():
@@ -143,6 +148,7 @@ def main(url, fmt):
         instance = copy.deepcopy(geojson_area)
         instance['properties']['name'] = data['name']
         instance['properties']['count'] = data['count']
+        node_count = node_count + int(data['count'])
 
         instance['geometry']['type'] = polygon['type']
         instance['geometry']['coordinates'] = polygon['coordinates']
@@ -153,6 +159,11 @@ def main(url, fmt):
         frame = geojson_frame
         frame['features'] = areas
         handle.write(json.dumps(frame))
+
+    with open('state.json', 'w') as handle_state:
+        state['last_modified'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        state['nodes'] = node_count
+        handle_state.write(json.dumps(state))
 
 
 if __name__ == '__main__':
